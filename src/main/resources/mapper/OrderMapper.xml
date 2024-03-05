@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hykang.management.mapper.OrderMapper">
+
+
+    <!--分页查询-->
+    <select id="getOrderByPage" resultType="com.hykang.management.entity.Order">
+        SELECT * FROM `order`
+        <where>
+            <if test="orderNumber != null and orderNumber != ''">
+                and order_number like concat("%",#{orderNumber},"%")
+            </if>
+            <if test="isSend != null and isSend != ''">
+                and is_send = #{isSend}
+            </if>
+            <if test="payStatus != null and payStatus != ''">
+                and pay_status = #{payStatus}
+            </if>
+        </where>
+        order by create_time DESC
+        limit #{startPage},#{pageSize}
+    </select>
+
+    <!--总数查询-->
+    <select id="getOrderCount" resultType="long">
+        SELECT COUNT(1) FROM `order`
+    </select>
+
+    <resultMap id="OrderMap" type="com.hykang.management.entity.vo.OrderVo">
+        <id property="orderId" column="order_id"></id>
+        <result property="userId" column="user_id"></result>
+        <result property="orderNumber" column="order_number"></result>
+        <result property="orderPrice" column="order_price"></result>
+        <result property="orderPay" column="order_pay"></result>
+        <result property="isSend" column="is_send"></result>
+        <result property="tradeNo" column="trade_no"></result>
+        <result property="orderInvoiceContent" column="order_invoice_content"></result>
+        <result property="consigneeName" column="consignee_name"></result>
+        <result property="consigneePhone" column="consignee_phone"></result>
+        <result property="consigneeAddress" column="consignee_address"></result>
+        <result property="payStatus" column="pay_status"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="updateTime" column="update_time"></result>
+        <collection property="goods" ofType="com.hykang.management.entity.OrderGoods">
+            <id property="id" column="id"></id>
+            <result property="orderId" column="order_id"></result>
+            <result property="goodsId" column="goods_id"></result>
+            <result property="goodsPrice" column="goods_price"></result>
+            <result property="goodsNumber" column="goods_number"></result>
+            <result property="goodsTotalPrice" column="goods_total_price"></result>
+        </collection>
+    </resultMap>
+
+    <!--通过id查询订单-->
+    <select id="getOrderById" parameterType="integer" resultMap="OrderMap">
+        SELECT * FROM `order` AS o LEFT JOIN order_goods AS og on o.order_id=og.order_id WHERE o.order_id=#{id} ORDER BY og.goods_id ASC
+    </select>
+
+    <!--修改订单-->
+    <update id="updateOrder" parameterType="com.hykang.management.entity.Order">
+        UPDATE `order` SET order_fapiao_content=#{orderFapiaoContent},consignee_name=#{consigneeName},consignee_phone=#{consigneePhone},consignee_address=#{consigneeAddress} WHERE order_id=#{orderId}
+    </update>
+
+    <!--删除订单-->
+    <delete id="deleteOrderById" parameterType="integer">
+        DELETE FROM `order` WHERE order_id=#{id}
+    </delete>
+    <!--删除订单对应商品-->
+    <delete id="deleteOrderGoodsByOrderId" parameterType="integer">
+        DELETE FROM order_goods WHERE order_id=#{orderId}
+    </delete>
+
+</mapper>

@@ -1,0 +1,60 @@
+package com.hykang.management.service.impl;
+
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hykang.management.entity.Order;
+import com.hykang.management.entity.vo.OrderVo;
+import com.hykang.management.mapper.OrderMapper;
+import com.hykang.management.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements OrderService {
+
+    @Autowired
+    private OrderMapper orderMapper;
+
+    @Override
+    public List<Order> getOrderByPage(Integer startPage, Integer pageSize, String orderNumber, Integer isSend, Integer payStatus) {
+        List<Order> orderByPage = orderMapper.getOrderByPage(startPage, pageSize, orderNumber, isSend, payStatus);
+        if(orderByPage.size()==0){
+            return null;
+        }
+        return orderByPage;
+    }
+
+    @Override
+    public long getOrderCount() {
+        return orderMapper.getOrderCount();
+    }
+
+    @Override
+    public OrderVo getOrderById(Integer id) {
+        return orderMapper.getOrderById(id);
+    }
+
+    @Override
+    public boolean updateOrder(Order order) {
+        return orderMapper.updateOrder(order);
+    }
+
+    /**
+     * 删除订单：同时删除订单数据和对应的订单商品数据，才算删除成功！！！
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean deleteOrderById(Integer id) {
+        boolean flagOrderGoods = deleteOrderGoodsByOrderId(id);
+        boolean flagOrder = orderMapper.deleteOrderById(id);
+        return flagOrderGoods&&flagOrder;
+    }
+
+    @Override
+    public boolean deleteOrderGoodsByOrderId(Integer orderId) {
+        return orderMapper.deleteOrderGoodsByOrderId(orderId);
+    }
+
+}
