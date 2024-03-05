@@ -35,4 +35,13 @@ public class PermissionApiServiceImpl extends ServiceImpl<PermissionApiMapper, P
         }
         return allRightTree;
     }
+
+    @Override
+    public List<PermissionParentChildVo> getMenus() {
+        List<PermissionParentChildVo> menus = permissionApiMapper.getMenus();
+        if(menus.size()==0){
+            return null;
+        }
+        return menus;
+    }
 }

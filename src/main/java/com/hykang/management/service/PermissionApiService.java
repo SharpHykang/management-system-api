@@ -12,4 +12,6 @@ public interface PermissionApiService extends IService<PermissionApi> {
     List<PermissionCustom> getAllRightList();
 
     List<PermissionParentChildVo> getAllRightTree();
+
+    List<PermissionParentChildVo> getMenus();
 }

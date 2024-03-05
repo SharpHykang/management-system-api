@@ -43,7 +43,7 @@
 
 
     <!--递归查询出树结构节点：mybatis提供的collection标签自动组织树形结构-->
-    <resultMap id="ParentChildTreeMap" type="com.hykang.management.entity.vo.PermissionParentChildVo">
+    <resultMap id="ParentChildTreeRightMap" type="com.hykang.management.entity.vo.PermissionParentChildVo">
         <id property="id" column="id"></id>
         <result property="permissionId" column="permission_id"></result>
         <result property="apiService" column="api_service"></result>
@@ -61,18 +61,56 @@
             column：上一条语句查询的结果作为下一条语句的参数-->
         <collection property="children" column="permission_id"
                     ofType="com.hykang.management.entity.vo.PermissionParentChildVo" javaType="java.util.ArrayList"
-                    select="getParentChildTree">
+                    select="getParentChildRightTree">
         </collection>
     </resultMap>
     <!--父级查询：从pid为0开始递归-->
-    <select id="getAllRightTree" resultMap="ParentChildTreeMap">
+    <select id="getAllRightTree" resultMap="ParentChildTreeRightMap">
         <include refid="PermissionSelect"></include>
         and p.pid=0
     </select>
     <!--关联集合查询-->
-    <select id="getParentChildTree" parameterType="int" resultMap="ParentChildTreeMap">
+    <select id="getParentChildRightTree" parameterType="int" resultMap="ParentChildTreeRightMap">
         <include refid="PermissionSelect"></include>
         and
         p.pid=#{permission_id}
     </select>
+
+
+    <resultMap id="ParentChildTreeMenusMap" type="com.hykang.management.entity.vo.PermissionParentChildVo">
+        <id property="id" column="id"></id>
+        <result property="permissionId" column="permission_id"></result>
+        <result property="apiService" column="api_service"></result>
+        <result property="apiAction" column="api_action"></result>
+        <result property="apiPath" column="api_path"></result>
+        <result property="apiOrder" column="api_order"></result>
+        <result property="name" column="name"></result>
+        <result property="pid" column="pid"></result>
+        <result property="level" column="level"></result>
+        <!--使用mybatis collection进行集合查询
+            collection：即为嵌套的List配置
+            property：为private List<...> children的字段名children
+            ofType：为private List children 的类型
+            select：为要递归的sql语句
+            column：上一条语句查询的结果作为下一条语句的参数-->
+        <collection property="children" column="permission_id"
+                    ofType="com.hykang.management.entity.vo.PermissionParentChildVo" javaType="java.util.ArrayList"
+                    select="getParentChildMenusTree">
+        </collection>
+    </resultMap>
+    <sql id="MenusSelect">
+        and p.level in (0,1) order by pa.api_order asc
+    </sql>
+    <!--获取权限菜单-->
+    <select id="getMenus" resultMap="ParentChildTreeMenusMap">
+        <include refid="PermissionSelect"></include>
+        and p.pid=0
+        <include refid="MenusSelect"></include>
+    </select>
+    <select id="getParentChildMenusTree" parameterType="int" resultMap="ParentChildTreeMenusMap">
+        <include refid="PermissionSelect"></include>
+        and p.pid=#{permission_id}
+        <include refid="MenusSelect"></include>
+    </select>
+
 </mapper>

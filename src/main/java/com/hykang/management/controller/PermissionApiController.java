@@ -53,4 +53,19 @@ public class PermissionApiController {
             return Result.error("未查到数据！");
         }
     }
+
+    /**
+     * 获取权限菜单
+     * @return
+     */
+    @Operation(summary = "获取权限菜单")
+    @GetMapping("/getMenus")
+    public Result<List<PermissionParentChildVo>> getMenus(){
+        List<PermissionParentChildVo> menus = permissionApiService.getMenus();
+        if(menus!=null){
+            return Result.success(menus);
+        }else{
+            return Result.error("未查到数据！");
+        }
+    }
 }

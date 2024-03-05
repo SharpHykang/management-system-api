@@ -14,4 +14,6 @@ public interface PermissionApiMapper extends BaseMapper<PermissionApi> {
     List<PermissionCustom> getAllRightList();
     // 获取权限树状列表
     List<PermissionParentChildVo> getAllRightTree();
+    // 获取权限菜单
+    List<PermissionParentChildVo> getMenus();
 }
