@@ -28,8 +28,11 @@ public interface ManagerMapper extends BaseMapper<Manager> {
     // 批量删除用户
     int batchDeleteManager(@Param("ids") List<Long> ids);
 
-    // 更新用户
+    // 更新用户：更新多个变量
     boolean updateManagerById(Manager manager);
+
+    // 用户角色分配：更新一个变量
+    boolean updateManagerRoleId(Manager manager);
 
     // 根据Id查询用户
     Manager findManagerById(long id);

@@ -16,6 +16,9 @@ public class Manager {
     private String password;
     private String email;
     private String phone;
+    private String gender;
+    private Integer age;
+    private String address;
     private String avatarUrl;
     private Integer roleId;   //外键
     private LocalDateTime createTime;

@@ -15,6 +15,7 @@ public interface ManagerService extends IService<Manager> {
      boolean deleteManagerById(long id);
      int batchDeleteManager(List<Long> ids);
      boolean updateManagerById(Manager manager);
+     boolean updateManagerRoleId(Manager manager);
      Manager findManagerById(long id);
      Manager findManagerByName(String username);
      Manager findManagerByIdAndName(long id,String username);

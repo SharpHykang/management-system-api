@@ -31,7 +31,7 @@
     <!--整合常用查询属性-->
     <sql id="ManagerFields">
         id
-        ,username,email,phone,avatar_url,role_id,create_time,update_time,status,is_deleted
+        ,username,email,phone,gender,age,address,avatar_url,role_id,create_time,update_time,status,is_deleted
     </sql>
 
     <!--id是mapper里面的方法名，resultType就是返回的类型-->
@@ -70,8 +70,8 @@
     -->
     <insert id="savaManager" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.hykang.management.entity.Manager">
-        insert into manager(username, password, email, phone, role_id)
-        values (#{username}, #{password}, #{email}, #{phone}, #{roleId})
+        insert into manager(username, password, email, phone,gender,age,address,role_id)
+        values (#{username}, #{password}, #{email}, #{phone},#{gender},#{age},#{address},#{roleId})
     </insert>
 
     <!--删除用户：delete返回受影响行数-->
@@ -103,8 +103,16 @@
         set username=#{username},
             password=#{password},
             email=#{email},
-            phone=#{phone}
+            phone=#{phone},
+            gender=#{gender},
+            age=#{age},
+            address=#{address}
         where id = #{id}
+    </update>
+    
+    <!--用户角色分配-->
+    <update id="updateManagerRoleId" parameterType="com.hykang.management.entity.Manager">
+        update manager set role_id=#{roleId} where id=#{id}
     </update>
 
     <!--根据Id查询用户-->

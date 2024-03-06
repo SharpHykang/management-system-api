@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
@@ -134,7 +135,7 @@ public class ManagerController {
     public Result<String> updateManagerById(@RequestBody Manager manager){
         Manager managerByIdAndName = managerService.findManagerByIdAndName(manager.getId(), manager.getUsername());
         if(managerByIdAndName!=null){
-            return Result.error("用户名已存在");
+            return Result.error("用户名已存在！");
         }
         // 对密码进行md5加密存入数据库
         manager.setPassword(DigestUtils.md5DigestAsHex(manager.getPassword().getBytes()));
@@ -143,6 +144,22 @@ public class ManagerController {
             return Result.success("用户修改成功！");
         }else{
             return Result.error("用户修改失败！");
+        }
+    }
+
+    /**
+     * 用户角色分配
+     * @param manager
+     * @return
+     */
+    @Operation(summary = "用户角色分配")
+    @PutMapping("/updateManagerRoleId")
+    public Result<String> updateManagerRoleId(@RequestBody Manager manager){
+        boolean flag = managerService.updateManagerRoleId(manager);
+        if(flag){
+            return Result.success("用户角色分配成功！");
+        }else{
+            return Result.error("用户角色分配失败！");
         }
     }
 

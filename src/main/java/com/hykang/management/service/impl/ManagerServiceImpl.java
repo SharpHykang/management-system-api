@@ -62,6 +62,11 @@ public class ManagerServiceImpl extends ServiceImpl<ManagerMapper, Manager> impl
     }
 
     @Override
+    public boolean updateManagerRoleId(Manager manager) {
+        return managerMapper.updateManagerRoleId(manager);
+    }
+
+    @Override
     public Manager findManagerById(long id) {
         return managerMapper.findManagerById(id);
     }
