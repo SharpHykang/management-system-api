@@ -29,12 +29,16 @@ public class WebConfiguration implements WebMvcConfigurer {
      */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
+        // 设置允许跨域的路由
         registry.addMapping("/**")
-                .allowedHeaders("*")
-                .allowedMethods("*")
-//                .allowedOrigins("*")
+                // 设置允许跨域请求的域名
                 .allowedOriginPatterns("*")
-                .allowCredentials(true);
+                // 是否允许证书（cookies）
+                .allowCredentials(true)
+                // 设置允许的方法
+                .allowedMethods("*")
+                // 跨域允许时间
+                .maxAge(3600);
     }
 
     /**
@@ -59,13 +63,13 @@ public class WebConfiguration implements WebMvcConfigurer {
         List<String> excludePath = new ArrayList<>();
         //排除拦截，除了注册登录(此时还没token)，其他都拦截
         excludePath.add("/managers/login");  //登录
-        excludePath.add("/swagger-resources/**");     //swagger
-        excludePath.add("/webjars/**");     //swagger
-        excludePath.add("/v2/**");     //swagger
+        // 原生Swagger3需要请求的路径/资源
         excludePath.add("/v3/**");     //swagger
+        excludePath.add("/swagger-resources/**");     //swagger
         excludePath.add("/swagger-ui/**");     //swagger
-        excludePath.add("/api");     //swagger
-        excludePath.add("/api-docs/**");     //swagger
+        // knief4j美化需要请求的路径/资源。
+        excludePath.add("/webjars/**");     //swagger
+        excludePath.add("/favicon.ico/**");     //swagger
         excludePath.add("/doc.html/**");     //swagger
         registry.addInterceptor(tokenInterceptor)
                 .addPathPatterns("/**")   //拦截所有路径
