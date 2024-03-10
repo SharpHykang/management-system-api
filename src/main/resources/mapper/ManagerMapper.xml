@@ -43,7 +43,7 @@
         <!-- where标签可以自动添加where，同时处理sql语句中第一个and关键字 -->
         <where>
             <if test="username != null and username != ''">
-                and username like concat("%",#{username},"%")
+                and BINARY username like concat("%",#{username},"%")
             </if>
         </where>
         order by create_time DESC

@@ -7,7 +7,7 @@
         SELECT * FROM goods
         <where>
             <if test="goodsName != null and goodsName != ''">
-                and goods_name like concat("%",#{goodsName},"%")
+                and BINARY goods_name like concat("%",#{goodsName},"%")
             </if>
             and is_delete = 0
         </where>

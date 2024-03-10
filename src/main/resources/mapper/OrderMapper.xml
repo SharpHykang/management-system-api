@@ -8,7 +8,7 @@
         SELECT * FROM `order`
         <where>
             <if test="orderNumber != null and orderNumber != ''">
-                and order_number like concat("%",#{orderNumber},"%")
+                and BINARY order_number like concat("%",#{orderNumber},"%")
             </if>
             <if test="isSend != null and isSend != ''">
                 and is_send = #{isSend}
