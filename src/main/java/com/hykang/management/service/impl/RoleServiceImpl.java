@@ -21,7 +21,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public List<RoleParentChildVo> getAllRoleTree() {
         List<Role> roleList=getAllRoleList();
-        if(roleList.size()==0){
+        if(roleList==null){
             return null;
         }
         List<RoleParentChildVo> roleParentChildVoList=new ArrayList<>();
@@ -39,7 +39,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public List<Role> getAllRoleList() {
-        return roleMapper.getAllRoleList();
+        List<Role> allRoleList = roleMapper.getAllRoleList();
+        if(allRoleList.size()==0){
+            return null;
+        }
+        return allRoleList;
     }
 
     @Override

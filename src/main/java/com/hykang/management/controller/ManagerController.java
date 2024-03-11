@@ -4,16 +4,15 @@ package com.hykang.management.controller;
 import com.hykang.management.common.Pager;
 import com.hykang.management.common.Result;
 import com.hykang.management.entity.Manager;
-import com.hykang.management.entity.dto.ManagerCustom;
+import com.hykang.management.entity.vo.ManagerVo;
+import com.hykang.management.entity.vo.ManagerLoginVo;
 import com.hykang.management.service.ManagerService;
 import com.hykang.management.utils.TokenUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
@@ -30,15 +29,15 @@ public class ManagerController {
     private ManagerService managerService;
 
     /**用户登录
-     * @param managerCustom
+     * @param managerLoginVo
      * @return
      */
     @Operation(summary = "管理员登录")
     @PostMapping("/login")
-    public Result<Manager> login(@RequestBody ManagerCustom managerCustom){
-        String password=managerCustom.getPassword();
+    public Result<ManagerLoginVo> login(@RequestBody ManagerLoginVo managerLoginVo){
+        String password=managerLoginVo.getPassword();
         password=DigestUtils.md5DigestAsHex(password.getBytes());
-        ManagerCustom loginManager = managerService.login(managerCustom);
+        ManagerLoginVo loginManager = managerService.login(managerLoginVo);
         if(loginManager==null){
             return Result.error("用户名不存在，登录失败！");
         }
@@ -49,7 +48,7 @@ public class ManagerController {
             return Result.error("账号已禁用！");
         }
         // 生成token
-        String token = TokenUtils.sign(managerCustom);
+        String token = TokenUtils.sign(managerLoginVo);
         loginManager.setToken(token);
         //设置password为null，防止密码泄露
         loginManager.setPassword(null);
@@ -70,11 +69,11 @@ public class ManagerController {
             @Parameter(name = "username",description = "用户名")
     })
     @GetMapping("/getManagerByPage")
-    public Result<Pager<Manager>> getManagerByPage(Integer pageNum, Integer pageSize, String username){
+    public Result<Pager<ManagerVo>> getManagerByPage(Integer pageNum, Integer pageSize, String username){
         log.info("pageNum="+pageNum+"，pageSize="+pageSize+"，username="+username);
-        List<Manager> Managers = managerService.findManagerByPage((pageNum-1)*pageSize,pageSize,username);
+        List<ManagerVo> Managers = managerService.findManagerByPage((pageNum-1)*pageSize,pageSize,username);
         if(Managers!=null){
-            Pager<Manager> pager=new Pager();
+            Pager<ManagerVo> pager=new Pager();
             pager.setPageNum(pageNum);
             pager.setPageSize(pageSize);
             pager.setData(Managers);
@@ -171,12 +170,28 @@ public class ManagerController {
     @Operation(summary = "通过Id查询管理员")
     @Parameter(name = "id",description = "管理员id")
     @GetMapping("/findManagerById/{id}")
-    public Result<Manager> findManagerById(@PathVariable long id){
-        Manager Manager = managerService.findManagerById(id);
+    public Result<ManagerVo> findManagerById(@PathVariable long id){
+        ManagerVo Manager = managerService.findManagerById(id);
         if(Manager!=null){
             return Result.success(Manager);
         }else{
             return Result.error("未查到数据！");
+        }
+    }
+
+    /**
+     * 更新管理员状态
+     * @param manager
+     * @return
+     */
+    @Operation(summary = "更新管理员状态")
+    @PutMapping("/updateManagerStatus")
+    public Result<String> updateManagerStatus(@RequestBody Manager manager){
+        Boolean flag = managerService.updateManagerStatus(manager);
+        if(flag){
+            return Result.success("管理员状态更新成功！");
+        }else{
+            return Result.error("管理员状态更新失败！");
         }
     }
 }

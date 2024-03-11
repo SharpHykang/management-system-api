@@ -3,7 +3,8 @@ package com.hykang.management.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hykang.management.entity.Manager;
-import com.hykang.management.entity.dto.ManagerCustom;
+import com.hykang.management.entity.vo.ManagerVo;
+import com.hykang.management.entity.vo.ManagerLoginVo;
 import com.hykang.management.mapper.ManagerMapper;
 import com.hykang.management.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,8 @@ public class ManagerServiceImpl extends ServiceImpl<ManagerMapper, Manager> impl
 
     //处理业务逻辑，这里由于业务过于简单，就空着，查询出什么我就返回什么
     @Override
-    public List<Manager> findManagerByPage(Integer startPage, Integer pageSize, String username){
-        List<Manager> managerByPage = managerMapper.findManagerByPage(startPage, pageSize, username);
+    public List<ManagerVo> findManagerByPage(Integer startPage, Integer pageSize, String username){
+        List<ManagerVo> managerByPage = managerMapper.findManagerByPage(startPage, pageSize, username);
         if(managerByPage.size()==0){
             return null;
         }
@@ -37,8 +38,8 @@ public class ManagerServiceImpl extends ServiceImpl<ManagerMapper, Manager> impl
     }
 
     @Override
-    public ManagerCustom login(ManagerCustom managerCustom) {
-        return managerMapper.login(managerCustom);
+    public ManagerLoginVo login(ManagerLoginVo managerLoginVo) {
+        return managerMapper.login(managerLoginVo);
     }
 
     @Override
@@ -67,7 +68,7 @@ public class ManagerServiceImpl extends ServiceImpl<ManagerMapper, Manager> impl
     }
 
     @Override
-    public Manager findManagerById(long id) {
+    public ManagerVo findManagerById(long id) {
         return managerMapper.findManagerById(id);
     }
 
@@ -79,6 +80,11 @@ public class ManagerServiceImpl extends ServiceImpl<ManagerMapper, Manager> impl
     @Override
     public Manager findManagerByIdAndName(long id, String username) {
         return managerMapper.findManagerByIdAndName(id,username);
+    }
+
+    @Override
+    public Boolean updateManagerStatus(Manager manager) {
+        return managerMapper.updateManagerStatus(manager);
     }
 
 }

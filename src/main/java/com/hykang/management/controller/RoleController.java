@@ -38,6 +38,21 @@ public class RoleController {
     }
 
     /**
+     * 获取角色列表
+     * @return
+     */
+    @Operation(summary = "获取角色列表list")
+    @GetMapping("/getAllRoleList")
+    public Result<List<Role>> getAllRoleList(){
+        List<Role> allRoleList = roleService.getAllRoleList();
+        if(allRoleList!=null){
+            return Result.success(allRoleList);
+        }else{
+            return Result.error("未查到数据");
+        }
+    }
+
+    /**
      * 根据角色id获取角色信息
      * @param id
      * @return
