@@ -17,8 +17,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private OrderMapper orderMapper;
 
     @Override
-    public List<Order> getOrderByPage(Integer startPage, Integer pageSize, String orderNumber, Integer isSend, Integer payStatus) {
-        List<Order> orderByPage = orderMapper.getOrderByPage(startPage, pageSize, orderNumber, isSend, payStatus);
+    public List<OrderVo> getOrderByPage(Integer startPage, Integer pageSize, String orderNumber, Integer isSend, Integer payStatus) {
+        List<OrderVo> orderByPage = orderMapper.getOrderByPage(startPage, pageSize, orderNumber, isSend, payStatus);
         if(orderByPage.size()==0){
             return null;
         }
@@ -26,8 +26,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @Override
-    public long getOrderCount() {
-        return orderMapper.getOrderCount();
+    public long getOrderCount(String orderNumber, Integer isSend, Integer payStatus) {
+        return orderMapper.getOrderCount(orderNumber,isSend,payStatus);
     }
 
     @Override
@@ -36,8 +36,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @Override
-    public boolean updateOrder(Order order) {
-        return orderMapper.updateOrder(order);
+    public boolean updateOrder(OrderVo orderVo) {
+        return orderMapper.updateOrder(orderVo);
     }
 
     /**

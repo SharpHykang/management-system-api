@@ -75,6 +75,5 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .addPathPatterns("/**")   //拦截所有路径
                 .excludePathPatterns(excludePath);  //排除指定路径
         WebMvcConfigurer.super.addInterceptors(registry);
-
     }
 }

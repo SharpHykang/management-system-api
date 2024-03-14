@@ -49,4 +49,14 @@ public class Result<T> {
         result.setMsg(msg);
         return result;
     }
+
+    /**
+     * 失败：自定义提示信息、错误码
+     */
+    public static <V> Result<V> error(Integer code,String msg){
+        Result result=new Result<>();
+        result.setCode(code);
+        result.setMsg(msg);
+        return result;
+    }
 }

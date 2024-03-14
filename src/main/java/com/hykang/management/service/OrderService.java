@@ -9,10 +9,10 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface OrderService extends IService<Order> {
-    List<Order> getOrderByPage(Integer startPage,Integer pageSize,String orderNumber,Integer isSend,Integer payStatus);
+    List<OrderVo> getOrderByPage(Integer startPage,Integer pageSize,String orderNumber,Integer isSend,Integer payStatus);
 
-    long getOrderCount();
-    boolean updateOrder(Order order);
+    long getOrderCount(String orderNumber, Integer isSend, Integer payStatus);
+    boolean updateOrder(OrderVo orderVo);
 
     OrderVo getOrderById(Integer id);
 

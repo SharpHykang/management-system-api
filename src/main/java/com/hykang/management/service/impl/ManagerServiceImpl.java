@@ -33,8 +33,8 @@ public class ManagerServiceImpl extends ServiceImpl<ManagerMapper, Manager> impl
     }
 
     @Override
-    public long findManagerCount(){
-        return managerMapper.findManagerCount();
+    public long findManagerCount(String username){
+        return managerMapper.findManagerCount(username);
     }
 
     @Override

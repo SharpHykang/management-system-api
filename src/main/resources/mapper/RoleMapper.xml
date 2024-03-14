@@ -13,36 +13,31 @@
                     select="getParentChildTree">
         </collection>
     </resultMap>
-
     <sql id="roleAndPermissionFields">
-        r
-        .
-        id
-        as roleId,r.name as roleName,r.permission_ids as permissionIds,r.description as roleDesc,p.id as
+        r.id as roleId,r.name as roleName,r.permission_ids as permissionIds,r.description as roleDesc,p.id as
         permissionId,p.pid as permissionPid,p.name as permissionName,pa.api_path as apiPath
     </sql>
-
     <sql id="roleAndPermissionSelect">
         SELECT
         <include refid="roleAndPermissionFields"></include>
         FROM role as r LEFT JOIN permission_api as pa on FIND_IN_SET(pa.permission_id,r.permission_ids) LEFT JOIN
         permission as p ON p.id=pa.permission_id
     </sql>
+    <!--获取角色权限树状列表-->
+    <select id="getAllRoleTreeById" parameterType="integer" resultMap="PermissionApiCustomMap">
+        <include refid="roleAndPermissionSelect"></include>
+        WHERE r.id=#{roleId} and p.pid=0
+    </select>
+    <select id="getParentChildTree" parameterType="map" resultMap="PermissionApiCustomMap">
+        <include refid="roleAndPermissionSelect"></include>
+        WHERE r.id=#{roleId} and p.pid=#{permissionId}
+    </select>
 
+    <!--获取角色列表-->
     <select id="getAllRoleList" resultType="com.hykang.management.entity.Role">
         select *
         from role
         ORDER BY id ASC
-    </select>
-
-    <select id="getAllRoleTree" parameterType="integer" resultMap="PermissionApiCustomMap">
-        <include refid="roleAndPermissionSelect"></include>
-        WHERE r.id=#{roleId} and p.pid=0
-    </select>
-
-    <select id="getParentChildTree" parameterType="map" resultMap="PermissionApiCustomMap">
-        <include refid="roleAndPermissionSelect"></include>
-        WHERE r.id=#{roleId} and p.pid=#{permissionId}
     </select>
 
 

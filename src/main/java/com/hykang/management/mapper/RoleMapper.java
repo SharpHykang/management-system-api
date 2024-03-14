@@ -15,7 +15,7 @@ public interface RoleMapper extends BaseMapper<Role> {
     List<Role> getAllRoleList();
 
     // 获取角色权限树状列表
-    List<PermissionApiParantChildVo> getAllRoleTree(Integer roleId);
+    List<PermissionApiParantChildVo> getAllRoleTreeById(Integer roleId);
 
     // 根据角色id获取角色信息
     Role getRoleById(Integer id);

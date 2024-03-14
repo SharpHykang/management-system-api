@@ -2,30 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hykang.management.mapper.OrderMapper">
 
-
-    <!--分页查询-->
-    <select id="getOrderByPage" resultType="com.hykang.management.entity.Order">
-        SELECT * FROM `order`
-        <where>
-            <if test="orderNumber != null and orderNumber != ''">
-                and BINARY order_number like concat("%",#{orderNumber},"%")
-            </if>
-            <if test="isSend != null and isSend != ''">
-                and is_send = #{isSend}
-            </if>
-            <if test="payStatus != null and payStatus != ''">
-                and pay_status = #{payStatus}
-            </if>
-        </where>
-        order by create_time DESC
-        limit #{startPage},#{pageSize}
-    </select>
-
-    <!--总数查询-->
-    <select id="getOrderCount" resultType="long">
-        SELECT COUNT(1) FROM `order`
-    </select>
-
     <resultMap id="OrderMap" type="com.hykang.management.entity.vo.OrderVo">
         <id property="orderId" column="order_id"></id>
         <result property="userId" column="user_id"></result>
@@ -37,28 +13,68 @@
         <result property="orderInvoiceContent" column="order_invoice_content"></result>
         <result property="consigneeName" column="consignee_name"></result>
         <result property="consigneePhone" column="consignee_phone"></result>
-        <result property="consigneeAddress" column="consignee_address"></result>
+        <result property="consigneeAddressCounty" column="consignee_address_county"></result>
+        <result property="consigneeAddressDetail" column="consignee_address_detail"></result>
         <result property="payStatus" column="pay_status"></result>
         <result property="createTime" column="create_time"></result>
         <result property="updateTime" column="update_time"></result>
-        <collection property="goods" ofType="com.hykang.management.entity.OrderGoods">
+        <collection property="goods" column="order_id" javaType="java.util.ArrayList" ofType="com.hykang.management.entity.OrderGoods" select="getOrderGoods">
             <id property="id" column="id"></id>
             <result property="orderId" column="order_id"></result>
             <result property="goodsId" column="goods_id"></result>
             <result property="goodsPrice" column="goods_price"></result>
             <result property="goodsNumber" column="goods_number"></result>
             <result property="goodsTotalPrice" column="goods_total_price"></result>
+            <result property="goodsName" column="goods_name"></result>
+            <result property="goodsWeight" column="goods_weight"></result>
         </collection>
     </resultMap>
 
+    <!--使用<if test="_parameter.containsKey('参数')">去判断参数是否存在。-->
+    <sql id="getOrderQuery">
+        <where>
+            <if test="orderNumber != null and orderNumber != ''">
+                and BINARY order_number like concat("%",#{orderNumber},"%")
+            </if>
+            <if test="isSend != null and isSend != ''">
+                and is_send = #{isSend}
+            </if>
+            <if test="payStatus != null and payStatus != ''">
+                and pay_status = #{payStatus}
+            </if>
+        </where>
+    </sql>
+
+    <!--分页查询-->
+    <select id="getOrderByPage" resultMap="OrderMap">
+        SELECT * FROM `order`
+        <include refid="getOrderQuery"></include>
+        order by create_time DESC
+        limit #{startPage},#{pageSize}
+    </select>
+
+    <!--总数查询-->
+    <select id="getOrderCount" resultType="long">
+        SELECT COUNT(1) FROM `order`
+        <include refid="getOrderQuery"></include>
+    </select>
+
+    <!--子查询查询：order_goods和goods连表-->
+    <sql id="getOrderGoodsAttr">
+        og.id,og.order_id,og.goods_id,og.goods_number,og.goods_total_price,g.goods_name,g.goods_weight,g.goods_price
+    </sql>
+    <select id="getOrderGoods" parameterType="integer" resultType="com.hykang.management.entity.OrderGoods">
+        SELECT<include refid="getOrderGoodsAttr"></include>FROM order_goods as og inner join goods as g on og.goods_id=g.goods_id where og.order_id=#{order_id} and g.is_delete=0 order by g.create_time DESC
+    </select>
+
     <!--通过id查询订单-->
     <select id="getOrderById" parameterType="integer" resultMap="OrderMap">
-        SELECT * FROM `order` AS o LEFT JOIN order_goods AS og on o.order_id=og.order_id WHERE o.order_id=#{id} ORDER BY og.goods_id ASC
+        SELECT * FROM `order` WHERE order_id=#{id}
     </select>
 
     <!--修改订单-->
-    <update id="updateOrder" parameterType="com.hykang.management.entity.Order">
-        UPDATE `order` SET order_fapiao_content=#{orderFapiaoContent},consignee_name=#{consigneeName},consignee_phone=#{consigneePhone},consignee_address=#{consigneeAddress} WHERE order_id=#{orderId}
+    <update id="updateOrder" parameterType="com.hykang.management.entity.vo.OrderVo">
+        UPDATE `order` SET order_invoice_content=#{orderInvoiceContent},consignee_name=#{consigneeName},consignee_phone=#{consigneePhone},consignee_address_county=#{consigneeAddressCounty},consignee_address_detail=#{consigneeAddressDetail} WHERE order_id=#{orderId}
     </update>
 
     <!--删除订单-->

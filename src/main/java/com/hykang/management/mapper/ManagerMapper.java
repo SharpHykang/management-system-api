@@ -15,7 +15,7 @@ public interface ManagerMapper extends BaseMapper<Manager> {
     List<ManagerVo> findManagerByPage(@Param("startPage") Integer startPage, @Param("pageSize") Integer pageSize, @Param("username") String username);
 
     // 总数查询
-    long findManagerCount();
+    long findManagerCount(String username);
 
     // 登录
     ManagerLoginVo login(ManagerLoginVo managerLoginVo);

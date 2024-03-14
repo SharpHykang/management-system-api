@@ -77,7 +77,7 @@ public class ManagerController {
             pager.setPageNum(pageNum);
             pager.setPageSize(pageSize);
             pager.setData(Managers);
-            pager.setTotal(managerService.findManagerCount());
+            pager.setTotal(managerService.findManagerCount(username));
             return Result.success(pager);
         }else {
             return Result.error("未查到数据！");

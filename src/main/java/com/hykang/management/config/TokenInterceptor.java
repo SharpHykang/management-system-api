@@ -33,7 +33,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         }
         try {
             // 将错误信息返回
-            String jsonMap = new ObjectMapper().writeValueAsString(Result.error("token verify fail"));
+            String jsonMap = new ObjectMapper().writeValueAsString(Result.error(666,"token verify fail"));
             response.getWriter().append(jsonMap);
             System.out.println("认证失败，未通过拦截器");
         } catch (Exception e) {

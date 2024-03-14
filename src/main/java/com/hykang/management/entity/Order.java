@@ -15,13 +15,14 @@ public class Order {
     private String orderNumber;
     private BigDecimal orderPrice;
     private Integer orderPay;
-    private String isSend;
+    private Boolean isSend;
     private String tradeNo;
     private String orderInvoiceContent;
     private String consigneeName;
     private String consigneePhone;
-    private String consigneeAddress;
-    private Integer payStatus;
+    private String consigneeAddressCounty;
+    private String consigneeAddressDetail;
+    private Boolean payStatus;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 }

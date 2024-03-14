@@ -46,6 +46,7 @@
         <include refid="ManagerRoleFields"></include>
         <!-- where标签可以自动添加where，同时处理sql语句中第一个and关键字 -->
         <where>
+            <!--BINARY：模糊查询区分大小写-->
             <if test="username != null and username != ''">
                 and BINARY username like concat("%",#{username},"%")
             </if>
@@ -54,10 +55,16 @@
         limit #{startPage},#{pageSize}
     </select>
 
-    <!--总数查询-->
-    <select id="findManagerCount" resultType="long">
+    <!--总数查询：当前条件下的总条数-->
+    <select id="findManagerCount" resultType="long" parameterType="string">
         select count(1)
         from manager
+        <where>
+            <!--BINARY：模糊查询区分大小写-->
+            <if test="username != null and username != ''">
+                and BINARY username like concat("%",#{username},"%")
+            </if>
+        </where>
     </select>
 
     <!--登录验证-->

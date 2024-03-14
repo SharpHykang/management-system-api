@@ -6,7 +6,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class OrderGoods {
+public class OrderGoods{
     @TableId("id")
     private Integer id;
     private Integer orderId;
@@ -14,4 +14,6 @@ public class OrderGoods {
     private BigDecimal goodsPrice;
     private Integer goodsNumber;
     private BigDecimal goodsTotalPrice;
+    private String goodsName;
+    private String goodsWeight;
 }

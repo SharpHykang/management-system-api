@@ -39,14 +39,14 @@ public class OrderController {
             @Parameter(name = "payStatus",description = "支付状态")
     })
     @GetMapping("/getOrderByPage")
-    public Result<Pager<Order>> getOrderByPage(Integer pageNum, Integer pageSize, String orderNumber, Integer isSend, Integer payStatus){
-        List<Order> managerByPage = orderService.getOrderByPage((pageNum-1)*pageSize, pageSize, orderNumber, isSend, payStatus);
+    public Result<Pager<OrderVo>> getOrderByPage(Integer pageNum, Integer pageSize, String orderNumber, Integer isSend, Integer payStatus){
+        List<OrderVo> managerByPage = orderService.getOrderByPage((pageNum-1)*pageSize, pageSize, orderNumber, isSend, payStatus);
         if(managerByPage!=null){
-            Pager<Order> orderPager=new Pager<>();
+            Pager<OrderVo> orderPager=new Pager<>();
             orderPager.setData(managerByPage);
             orderPager.setPageNum(pageNum);
             orderPager.setPageSize(pageSize);
-            orderPager.setTotal(orderService.getOrderCount());
+            orderPager.setTotal(orderService.getOrderCount(orderNumber,isSend,payStatus));
             return Result.success(orderPager);
         }else{
             return Result.error("未查到数据！");
@@ -72,13 +72,13 @@ public class OrderController {
 
     /**
      * 修改订单信息
-     * @param order
+     * @param orderVo
      * @return
      */
     @Operation(summary = "修改订单")
     @PutMapping("/updateOrder")
-    public Result<String> updateOrder(@RequestBody Order order){
-        boolean flag = orderService.updateOrder(order);
+    public Result<String> updateOrder(@RequestBody OrderVo orderVo){
+        boolean flag = orderService.updateOrder(orderVo);
         if(flag){
             return Result.success("订单修改成功！");
         }else{

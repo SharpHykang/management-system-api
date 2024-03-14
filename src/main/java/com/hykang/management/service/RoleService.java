@@ -26,4 +26,8 @@ public interface RoleService extends IService<Role> {
     Role getRoleByName(String name);
 
     Role getRoleByIdAndName(Integer id,String name);
+
+    List<PermissionApiParantChildVo> deleteRolePermissionId(Integer id,Integer permissionId);
+
+    List<PermissionApiParantChildVo> getAllRoleTreeById(Integer id);
 }
