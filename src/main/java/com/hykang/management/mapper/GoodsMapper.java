@@ -15,10 +15,10 @@ import java.util.List;
 public interface GoodsMapper extends BaseMapper<Goods> {
 
     // 商品分页查询
-    List<Goods> getGoodsByPage(@Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize,@Param("goodsName") String goodsName);
+    List<Goods> getGoodsByPage(@Param("startPage") Integer startPage,@Param("pageSize") Integer pageSize,@Param("goodsName") String goodsName,@Param("isPromote") Integer isPromote,@Param("goodsState") Integer goodsState);
 
     // 商品总数查询
-    long getGoodsCount();
+    long getGoodsCount(@Param("goodsName") String goodsName,@Param("isPromote") Integer isPromote,@Param("goodsState") Integer goodsState);
 
     // 通过商品id详情查询
     GoodsVo getGoodsById(Integer id);

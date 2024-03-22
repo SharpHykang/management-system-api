@@ -2,15 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hykang.management.mapper.GoodsMapper">
 
-    <!--商品分页查询-->
-    <select id="getGoodsByPage" resultType="com.hykang.management.entity.Goods">
-        SELECT * FROM goods
+    <sql id="getOrderQuery">
         <where>
             <if test="goodsName != null and goodsName != ''">
                 and BINARY goods_name like concat("%",#{goodsName},"%")
             </if>
+            <if test="isPromote != null">
+                and is_promote=#{isPromote}
+            </if>
+            <if test="goodsState != null">
+                and goods_state=#{goodsState}
+            </if>
             and is_delete = 0
         </where>
+    </sql>
+
+    <!--商品分页查询-->
+    <select id="getGoodsByPage" resultType="com.hykang.management.entity.Goods">
+        SELECT * FROM goods
+        <include refid="getOrderQuery"></include>
         ORDER BY create_time DESC
         LIMIT #{startPage},#{pageSize}
     </select>
@@ -19,7 +29,7 @@
     <select id="getGoodsCount" resultType="long">
         SELECT COUNT(1)
         FROM goods
-        WHERE is_delete = 0
+        <include refid="getOrderQuery"></include>
     </select>
 
     <!--删除商品：逻辑删除-->

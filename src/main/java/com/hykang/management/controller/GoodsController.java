@@ -42,14 +42,14 @@ public class GoodsController {
             @Parameter(name = "goodsName",description = "商品名称")
     })
     @GetMapping("/getGoodsByPage")
-    public Result<Pager<Goods>> getGoodsByPage(Integer pageNum, Integer pageSize, String goodsName) {
-        List<Goods> goodsByPage = goodsService.getGoodsByPage((pageNum-1)*pageSize,pageSize,goodsName);
+    public Result<Pager<Goods>> getGoodsByPage(Integer pageNum, Integer pageSize, String goodsName,Integer isPromote,Integer goodsState) {
+        List<Goods> goodsByPage = goodsService.getGoodsByPage((pageNum-1)*pageSize,pageSize,goodsName,isPromote,goodsState);
         if(goodsByPage!=null){
             Pager<Goods> pager=new Pager<>();
             pager.setData(goodsByPage);
             pager.setPageNum(pageNum);
             pager.setPageSize(pageSize);
-            pager.setTotal(goodsService.getGoodsCount());
+            pager.setTotal(goodsService.getGoodsCount(goodsName,isPromote,goodsState));
             return Result.success(pager);
         }
         return Result.error("未查到数据！");

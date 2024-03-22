@@ -23,8 +23,19 @@
         SELECT * FROM  attribute WHERE attr_id=#{attrId} AND is_delete=0
     </select>
 
-    <!--编辑提交参数-->
+    <!--编辑参数：编辑参数名和更新参数值-->
     <update id="updateAttrbute" parameterType="com.hykang.management.entity.Attribute">
-        UPDATE attribute SET attr_name=#{attrName} WHERE attr_id=#{attrId}
+        UPDATE attribute
+        <set>
+            <if test="attrName!=null and attrName!=''">
+                attr_name=#{attrName},
+            </if>
+            <if test="attrVals!=null">
+                attr_vals=#{attrVals},
+            </if>
+        </set>
+        WHERE attr_id=#{attrId}
     </update>
+
+
 </mapper>

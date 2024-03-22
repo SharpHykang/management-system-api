@@ -35,24 +35,24 @@
     使用<if test="_parameter.containsKey('参数')">去判断参数是否存在。
     -->
     <sql id="getOrderQuery">
-        <if test="orderNumber != null and orderNumber != ''">
-            and BINARY order_number like concat("%",#{orderNumber},"%")
-        </if>
-        <!--mybatis的一个bug，当判断条件status为整型时，如果status=0时，if test里会判断status=’ '-->
-        <if test="isSend != null">
-            and is_send = #{isSend}
-        </if>
-        <if test="payStatus != null">
-            and pay_status = #{payStatus}
-        </if>
+        <where>
+            <if test="orderNumber != null and orderNumber != ''">
+                and BINARY order_number like concat("%",#{orderNumber},"%")
+            </if>
+            <!--mybatis的一个bug，当判断条件status为整型时，如果status=0时，if test里会判断status=’ '-->
+            <if test="isSend != null">
+                and is_send = #{isSend}
+            </if>
+            <if test="payStatus != null">
+                and pay_status = #{payStatus}
+            </if>
+        </where>
     </sql>
 
     <!--分页查询-->
     <select id="getOrderByPage" resultMap="OrderMap">
         SELECT * FROM `order`
-        <where>
-            <include refid="getOrderQuery"></include>
-        </where>
+        <include refid="getOrderQuery"></include>
         order by create_time DESC
         limit #{startPage},#{pageSize}
     </select>
@@ -60,9 +60,7 @@
     <!--总数查询-->
     <select id="getOrderCount" resultType="long">
         SELECT COUNT(1) FROM `order`
-        <where>
-            <include refid="getOrderQuery"></include>
-        </where>
+        <include refid="getOrderQuery"></include>
     </select>
 
     <!--子查询查询：order_goods和goods连表-->

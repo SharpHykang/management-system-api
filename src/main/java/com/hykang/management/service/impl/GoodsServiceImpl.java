@@ -30,8 +30,8 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     private ServletWebServerApplicationContext servletWebServerApplicationContext;
 
     @Override
-    public List<Goods> getGoodsByPage(Integer startPage, Integer pageSize, String goodsName) {
-        List<Goods> goodsByPage = goodsMapper.getGoodsByPage(startPage, pageSize, goodsName);
+    public List<Goods> getGoodsByPage(Integer startPage, Integer pageSize, String goodsName,Integer isPromote,Integer goodsState) {
+        List<Goods> goodsByPage = goodsMapper.getGoodsByPage(startPage, pageSize, goodsName,isPromote,goodsState);
         if (goodsByPage.size() == 0) {
             return null;
         }
@@ -39,8 +39,8 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     }
 
     @Override
-    public long getGoodsCount() {
-        return goodsMapper.getGoodsCount();
+    public long getGoodsCount(String goodsName,Integer isPromote,Integer goodsState) {
+        return goodsMapper.getGoodsCount(goodsName,isPromote,goodsState);
     }
 
     @Override

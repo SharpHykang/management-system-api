@@ -108,7 +108,7 @@ public class CategoryController {
      */
     @Operation(summary = "删除分类")
     @Parameter(name = "id",description = "分类id")
-    @PutMapping("/deleteCategory/{id}")
+    @DeleteMapping("/deleteCategory/{id}")
     public Result<String> deleteCategory(@PathVariable Integer id) {
         Boolean flag = categoryService.deleteCategory(id);
         if (flag) {

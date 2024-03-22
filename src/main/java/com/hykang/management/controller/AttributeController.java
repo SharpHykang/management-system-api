@@ -28,7 +28,7 @@ public class AttributeController {
      * @return
      */
     @Operation(summary = "通过分类获取属性列表")
-    @GetMapping("/getAttributeByCatId")
+    @PostMapping("/getAttributeByCatId")
     public Result<List<Attribute>> getAttributeByCatId(@RequestBody Attribute attribute){
         List<Attribute> attributeByCatId = attributeService.getAttributeByCatId(attribute);
         if(attributeByCatId!=null){
@@ -61,7 +61,7 @@ public class AttributeController {
      */
     @Operation(summary = "删除属性")
     @Parameter(name = "attrId",description = "属性id")
-    @PutMapping("/deleteAttribute/{attrId}")
+    @DeleteMapping("/deleteAttribute/{attrId}")
     public Result<String> deleteAttribute(@PathVariable Integer attrId){
         Boolean flag = attributeService.deleteAttribute(attrId);
         if(flag){
