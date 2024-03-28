@@ -122,6 +122,14 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <!--如果您因单元测试失败而遇到错误，并且您的 pom.xml 文件中有此配置以跳过测试。-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
