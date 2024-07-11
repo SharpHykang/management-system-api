@@ -91,4 +91,11 @@
           AND id != #{id}
     </select>
 
+
+    <!--根据管理员id查角色信息-->
+    <select id="getPermissionByRoleId" parameterType="int" resultType="com.hykang.management.entity.dto.PermissionCustom">
+        <include refid="roleAndPermissionSelect"></include>
+        WHERE r.id=#{roleId}
+    </select>
+
 </mapper>

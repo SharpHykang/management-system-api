@@ -22,6 +22,9 @@ public class WebConfiguration implements WebMvcConfigurer {
     @Autowired
     private TokenInterceptor tokenInterceptor;
 
+    // @Autowired
+    // private Interceptor interceptor;
+
     /**
      * 解决跨域请求
      *

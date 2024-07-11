@@ -2,6 +2,7 @@ package com.hykang.management.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.hykang.management.entity.Role;
+import com.hykang.management.entity.dto.PermissionCustom;
 import com.hykang.management.entity.vo.PermissionApiParantChildVo;
 import com.hykang.management.entity.vo.RoleParentChildVo;
 import org.apache.ibatis.annotations.Mapper;
@@ -37,4 +38,6 @@ public interface RoleMapper extends BaseMapper<Role> {
 
     // 根据角色id和角色名查询角色：角色防止重复角色名
     Role getRoleByIdAndName(@Param("id") Integer id,@Param("name") String name);
+
+    PermissionCustom getPermissionByRoleId(Integer roleId);
 }
